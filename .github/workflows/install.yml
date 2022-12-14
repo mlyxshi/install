@@ -7,12 +7,12 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
     - uses: nixbuild/nix-quick-install-action@v19
       with:
         nix_conf: experimental-features = nix-command flakes
-    - run: mkdir install
     - run: |
+        git clone --depth=1 https://github.com/mlyxshi/flake.git
+        cd flake
         for host in $(nix flake show --json | jq '.nixosConfigurations|keys[]' | tr -d '"'); do
           SYSTEM_CLOSURE=$(nix eval --raw .#nixosConfigurations.$host.config.system.build.toplevel)
           cat $SYSTEM_CLOSURE > install/$host
@@ -22,4 +22,4 @@ jobs:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "latest"
         prerelease: true
-        files: install/*
+        files: flake/install/*
