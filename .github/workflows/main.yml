@@ -4,7 +4,7 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
-    - uses: nixbuild/nix-quick-install-action@v19
+    - uses: nixbuild/nix-quick-install-action@v21
       with:
         nix_conf: experimental-features = nix-command flakes
     - run: |
